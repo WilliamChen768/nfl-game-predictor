@@ -5,10 +5,10 @@ predict.py — predicts the next unplayed week using elo and saves a CSV
 import datetime as dt
 import pandas as pd
 import numpy as np
-from .config import PREDICTIONS_DIR
-from .games import load_games
-from .elo import EloModel
-from .backtest import win_prob
+from nflmodel.config import PREDICTIONS_DIR
+from nflmodel.data.games import load_games
+from nflmodel.models.elo import EloModel
+from nflmodel.evaluation.metrics import win_prob
 
 
 if __name__ == "__main__":

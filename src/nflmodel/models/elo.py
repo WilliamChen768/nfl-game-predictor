@@ -15,7 +15,7 @@ def expected_home_win(home_rating, away_rating, neutral):
         diff += HOME_BONUS
     return 1 / (1 + 10 ** (-diff / 400))
 
-# return the predicted outcome based on margin (1 for win, 0 for loss, 0.5 for tie)
+# turn the actual result into 1 for home win, 0 for loss, 0.5 for tie
 def outcome_from_margin(result):
     if result > 0:
         return 1
