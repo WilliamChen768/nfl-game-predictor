@@ -1,6 +1,7 @@
 """elo.py — every team has a rating that updates after each game"""
 
 import numpy as np
+import pandas as pd
 
 K = 35
 HOME_BONUS = 40
@@ -60,6 +61,10 @@ class EloModel:
         if not neutral:
             diff += HOME_BONUS
         predicted_margin = diff / 25
+
+        # if game hasnt been played, dont update ratings
+        if pd.isna(result):
+            return predicted_margin
 
         outcome = outcome_from_margin(result)
         self.ratings[home] = home_rating + K * (outcome - expected)

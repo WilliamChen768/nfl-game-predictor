@@ -4,6 +4,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / "data" / "raw"
 
+PREDICTIONS_DIR = ROOT / "predictions"
+
 FIRST_SEASON = 2006
 
 # Teams that relocated: old code -> current code
