@@ -1,11 +1,12 @@
 """elo.py — every team has a rating that updates after each game"""
 
+import math
 import numpy as np
 import pandas as pd
 
-K = 35
+K = 20
 HOME_BONUS = 40
-REGRESS = 1/4
+REGRESS = 1/3
 
 
 # return the probability that the home team wins based on ratings
@@ -23,6 +24,12 @@ def outcome_from_margin(result):
         return 0.5
     else:
         return 0
+
+# bigger wins move ratings more
+def mov_multiplier(result, diff):
+    winner_diff = diff if result > 0 else -diff
+    size = math.log(max(abs(result), 1) + 1)
+    return size * 2.2 / (winner_diff * 0.001 + 2.2)
 
 class EloModel:
     # run through every game and build ratings
@@ -67,6 +74,7 @@ class EloModel:
             return predicted_margin
 
         outcome = outcome_from_margin(result)
-        self.ratings[home] = home_rating + K * (outcome - expected)
-        self.ratings[away] = away_rating - K * (outcome - expected)
+        mult = mov_multiplier(result, diff)
+        self.ratings[home] = home_rating + K * mult * (outcome - expected)
+        self.ratings[away] = away_rating - K * mult * (outcome - expected)
         return predicted_margin
