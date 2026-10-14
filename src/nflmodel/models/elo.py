@@ -7,13 +7,11 @@ import pandas as pd
 K = 20
 HOME_BONUS = 40
 REGRESS = 1/3
+REST_BONUS = 5
 
 
 # return the probability that the home team wins based on ratings
-def expected_home_win(home_rating, away_rating, neutral):
-    diff = home_rating - away_rating
-    if not neutral:
-        diff += HOME_BONUS
+def expected_home_win(diff):
     return 1 / (1 + 10 ** (-diff / 400))
 
 # turn the actual result into 1 for home win, 0 for loss, 0.5 for tie
@@ -62,12 +60,13 @@ class EloModel:
         home_rating = self.ratings.get(home, 1500)
         away_rating = self.ratings.get(away, 1500)
 
-        expected = expected_home_win(home_rating, away_rating, neutral)
-
         diff = home_rating - away_rating
         if not neutral:
             diff += HOME_BONUS
+        diff += REST_BONUS * (game.home_rest - game.away_rest)
         predicted_margin = diff / 25
+
+        expected = expected_home_win(diff)
 
         # if game hasnt been played, dont update ratings
         if pd.isna(result):
