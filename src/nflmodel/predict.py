@@ -8,7 +8,7 @@ import pandas as pd
 import nflreadpy as nfl
 from nflmodel.config import PREDICTIONS_DIR
 from nflmodel.features.build import build_features
-from nflmodel.models.ridge import RidgeModel
+from nflmodel.models.hybrid import HybridModel
 from nflmodel.models.elo import EloModel
 from nflmodel.evaluation.metrics import win_prob
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     this_week = upcoming[(upcoming["season"] == season) & (upcoming["week"] == week)]
 
     # train on every completed game, then predict this week
-    model = RidgeModel().fit(played)
+    model = HybridModel().fit(played)
     pred = model.predict(this_week)
 
     out = this_week[["game_id", "gameday", "away_team", "home_team", "spread_line"]].copy()
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     out["elo_margin"] = this_week["elo_margin"].round(1)               # for comparison
     out["home_qb_id"] = this_week["home_qb_id"]
     out["away_qb_id"] = this_week["away_qb_id"]
-    out["model"] = "ridge"
+    out["model"] = "elo" if week <= 3 else "ridge"
     out["predicted_at"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
 
     PREDICTIONS_DIR.mkdir(exist_ok=True)

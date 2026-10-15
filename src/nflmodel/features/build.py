@@ -41,10 +41,6 @@ def build_features(include_upcoming=False, qb_overrides=None):
     df["elo_margin"] = EloModel().pregame_margins(df)
     df["rest_diff"] = df["home_rest"] - df["away_rest"]
     df["home_field"] = (~df["neutral"]).astype(int)
-    df["season_progress"] = (df["week"].clip(upper=4) - 1) / 3 # less epa trust early in season
-    for side in ["home", "away"]:
-        for c in ["off_epa_prior", "def_epa_prior"]:
-            df[f"{side}_{c}_x_prog"] = df[f"{side}_{c}"] * df["season_progress"]
     df = df.join(qb_recent_starts(df))
     return df
 
