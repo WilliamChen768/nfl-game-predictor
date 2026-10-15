@@ -3,6 +3,7 @@
 import pandas as pd
 from nflmodel.data.games import load_games
 from nflmodel.features.epa import build_team_epa
+from nflmodel.features.qb import qb_recent_starts
 from nflmodel.models.elo import EloModel
 
 
@@ -30,6 +31,7 @@ def build_features(include_upcoming=False):
     df["elo_margin"] = EloModel().pregame_margins(df)
     df["rest_diff"] = df["home_rest"] - df["away_rest"]
     df["home_field"] = (~df["neutral"]).astype(int)
+    df = df.join(qb_recent_starts(df))
     return df
 
 

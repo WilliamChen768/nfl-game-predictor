@@ -26,6 +26,7 @@ def load_games(include_upcoming=False):
         "result",        # home score minus away score (predict)
         "spread_line",   # expected home margin (benchmark)
         "home_rest", "away_rest", "div_game", "neutral", "playoff",
+        "home_qb_id", "away_qb_id", "home_qb_name", "away_qb_name",
     ]
 
     return df[columns].sort_values(["gameday", "game_id"]).reset_index(drop=True)
