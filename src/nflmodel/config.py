@@ -12,10 +12,7 @@ FIRST_SEASON = 2006
 TEAM_ALIASES = {"OAK": "LV", "SD": "LAC", "STL": "LA"}
 
 # seasons for training
-BACKTEST_SEASONS = range(2015, 2024)   # 2015-2023
-
-# seasons held for now
-HOLDOUT_SEASONS = range(2024, 2026)    # 2024-2025
+BACKTEST_SEASONS = range(2015, 2026)   # 2015-2025
 
 # average nfl margin spread
 MARGIN_SD = 13.5
