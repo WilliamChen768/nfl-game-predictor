@@ -27,6 +27,7 @@ def backtest(model, games, seasons=BACKTEST_SEASONS):
 
 if __name__ == "__main__":
     games = build_features()
+    
     for model in [HomeFieldBaseline(), EloModel(), RidgeModel()]:
         results = backtest(model, games)
         print(type(model).__name__)

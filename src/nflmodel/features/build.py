@@ -6,14 +6,16 @@ from nflmodel.features.epa import build_team_epa
 from nflmodel.models.elo import EloModel
 
 
+PRIOR_COLS = ["off_epa_prior", "def_epa_prior", "off_pass_epa_prior", "def_pass_epa_prior"]
+
+
 # attach one team's pre-game EPA to each game, with a home_ or away_ prefix
 def add_team_features(games, team_epa, side):
-    cols = team_epa[["game_id", "team", "off_epa_prior", "def_epa_prior"]]
-    cols = cols.rename(columns={
-        "team": f"{side}_team",
-        "off_epa_prior": f"{side}_off_epa_prior",
-        "def_epa_prior": f"{side}_def_epa_prior",
-    })
+    cols = team_epa[["game_id", "team"] + PRIOR_COLS]
+    renames = {"team": f"{side}_team"}
+    for c in PRIOR_COLS:
+        renames[c] = f"{side}_{c}"
+    cols = cols.rename(columns=renames)
     return games.merge(cols, on=["game_id", f"{side}_team"], how="left")
 
 
