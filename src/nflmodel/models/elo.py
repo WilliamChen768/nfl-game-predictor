@@ -77,3 +77,9 @@ class EloModel:
         self.ratings[home] = home_rating + K * mult * (outcome - expected)
         self.ratings[away] = away_rating - K * mult * (outcome - expected)
         return predicted_margin
+
+    # pregame elo margin for every game
+    def pregame_margins(self, games):
+        self.ratings = {}
+        self.season = None
+        return self.predict(games)

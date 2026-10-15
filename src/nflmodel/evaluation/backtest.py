@@ -2,10 +2,11 @@
 
 import pandas as pd
 from nflmodel.config import BACKTEST_SEASONS, HOLDOUT_SEASONS
-from nflmodel.data.games import load_games
+from nflmodel.features.build import build_features
 from nflmodel.evaluation.metrics import score
 from nflmodel.models.baseline import HomeFieldBaseline
 from nflmodel.models.elo import EloModel
+from nflmodel.models.ridge import RidgeModel
 
 
 # for each season, train on earlier ones and predict/score next
@@ -25,8 +26,9 @@ def backtest(model, games, seasons=BACKTEST_SEASONS):
 
 
 if __name__ == "__main__":
-    games = load_games()
-    for model in [HomeFieldBaseline(), EloModel()]:
+    games = build_features()
+    
+    for model in [HomeFieldBaseline(), EloModel(), RidgeModel()]:
         results = backtest(model, games)
         print(type(model).__name__)
         print(results[["season", "mae_model", "mae_vegas", "brier_model", "brier_vegas"]].round(3).to_string(index=False))
@@ -34,6 +36,8 @@ if __name__ == "__main__":
         print()
     
     print("=== HOLDOUT (2024-2025) ===")
-    holdout = backtest(EloModel(), games, seasons=HOLDOUT_SEASONS)
-    print(holdout[["season", "mae_model", "mae_vegas", "brier_model", "brier_vegas"]].round(3).to_string(index=False))
-    print("Average:", holdout[["mae_model", "mae_vegas", "brier_model", "brier_vegas"]].mean().round(3).to_dict())
+    for model in [EloModel(), RidgeModel()]:
+        holdout = backtest(model, games, seasons=HOLDOUT_SEASONS)
+        print(type(model).__name__)
+        print(holdout[["season", "mae_model", "mae_vegas", "brier_model", "brier_vegas"]].round(3).to_string(index=False))
+        print("Average:", holdout[["mae_model", "mae_vegas", "brier_model", "brier_vegas"]].mean().round(3).to_dict())
