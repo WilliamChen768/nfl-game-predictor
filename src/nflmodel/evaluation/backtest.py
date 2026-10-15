@@ -36,6 +36,8 @@ if __name__ == "__main__":
         print()
     
     print("=== HOLDOUT (2024-2025) ===")
-    holdout = backtest(EloModel(), games, seasons=HOLDOUT_SEASONS)
-    print(holdout[["season", "mae_model", "mae_vegas", "brier_model", "brier_vegas"]].round(3).to_string(index=False))
-    print("Average:", holdout[["mae_model", "mae_vegas", "brier_model", "brier_vegas"]].mean().round(3).to_dict())
+    for model in [EloModel(), RidgeModel()]:
+        holdout = backtest(model, games, seasons=HOLDOUT_SEASONS)
+        print(type(model).__name__)
+        print(holdout[["season", "mae_model", "mae_vegas", "brier_model", "brier_vegas"]].round(3).to_string(index=False))
+        print("Average:", holdout[["mae_model", "mae_vegas", "brier_model", "brier_vegas"]].mean().round(3).to_dict())

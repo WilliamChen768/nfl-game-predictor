@@ -2,8 +2,8 @@
 
 import pandas as pd
 from nflmodel.data.games import load_games
-from nflmodel.features.epa import build_team_epa
-from nflmodel.features.qb import qb_recent_starts
+from nflmodel.features.epa import load_plays, team_game_epa, add_priors, current_priors
+from nflmodel.features.qb import qb_recent_starts, fill_upcoming_qbs
 from nflmodel.models.elo import EloModel
 
 
@@ -20,13 +20,23 @@ def add_team_features(games, team_epa, side):
     return games.merge(cols, on=["game_id", f"{side}_team"], how="left")
 
 
-# every feature for every game, in date order
-def build_features(include_upcoming=False):
+# every feature for every game
+def build_features(include_upcoming=False, qb_overrides=None):
     games = load_games(include_upcoming)
-    team_epa = build_team_epa()
+    team_games = team_game_epa(load_plays())
+    team_epa = add_priors(team_games)
 
     df = add_team_features(games, team_epa, "home")
     df = add_team_features(df, team_epa, "away")
+
+    # upcoming games have no play-by-play: use each team's current average instead
+    upcoming = df["result"].isna()
+    if upcoming.any():
+        current = current_priors(team_games)
+        for side in ["home", "away"]:
+            for c in PRIOR_COLS:
+                df.loc[upcoming, f"{side}_{c}"] = df.loc[upcoming, f"{side}_team"].map(current[c])
+        df = fill_upcoming_qbs(df, qb_overrides)
 
     df["elo_margin"] = EloModel().pregame_margins(df)
     df["rest_diff"] = df["home_rest"] - df["away_rest"]

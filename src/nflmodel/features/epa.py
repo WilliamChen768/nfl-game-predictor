@@ -54,6 +54,13 @@ def add_priors(team_games, window=WINDOW):
     return df
 
 
+# each team's average over its most recent WINDOW games (for predicting upcoming games)
+def current_priors(team_games, window=WINDOW):
+    recent = team_games.groupby("team").tail(window)
+    cols = ["off_epa", "def_epa", "off_pass_epa", "def_pass_epa"]
+    return recent.groupby("team")[cols].mean().add_suffix("_prior")
+
+
 # plays -> team-games -> pre-game averages
 def build_team_epa(window=WINDOW):
     return add_priors(team_game_epa(load_plays()), window)

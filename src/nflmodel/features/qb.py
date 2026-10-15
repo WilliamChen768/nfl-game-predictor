@@ -21,3 +21,18 @@ def qb_recent_starts(games, lookback=LOOKBACK):
         "home_qb_starts": home_starts,
         "away_qb_starts": away_starts,
     }, index=games.index)
+
+
+# for unplayed games, assume each team's most recent starter starts again (unless overridden)
+def fill_upcoming_qbs(games, overrides=None):
+    df = games.copy()
+    last = {}
+    for g in df[df["result"].notna()].itertuples():   # date order: later games overwrite earlier
+        last[g.home_team] = g.home_qb_id
+        last[g.away_team] = g.away_qb_id
+    last.update(overrides or {})                       # manual overrides win
+
+    upcoming = df["result"].isna()
+    for side in ["home", "away"]:
+        df.loc[upcoming, f"{side}_qb_id"] = df.loc[upcoming, f"{side}_team"].map(last)
+    return df
