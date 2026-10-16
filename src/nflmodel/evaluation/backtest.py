@@ -35,5 +35,5 @@ if __name__ == "__main__":
         results = backtest(model, games)
         print(type(model).__name__)
         print(results[["season", "mae_model", "mae_vegas", "brier_model", "brier_vegas"]].round(3).to_string(index=False))
-        print("Average:", results[["mae_model", "mae_vegas", "brier_model", "brier_vegas"]].mean().round(3).to_dict())
+        print("Average:", results[["mae_model", "mae_vegas", "brier_model", "brier_vegas"]].mean().round(4).to_dict())
         print()

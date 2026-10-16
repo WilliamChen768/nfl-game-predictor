@@ -15,4 +15,4 @@ TEAM_ALIASES = {"OAK": "LV", "SD": "LAC", "STL": "LA"}
 BACKTEST_SEASONS = range(2015, 2026)   # 2015-2025
 
 # average nfl margin spread
-MARGIN_SD = 13.5
+MARGIN_SD = 13
