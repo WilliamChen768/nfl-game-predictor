@@ -8,6 +8,7 @@ from nflmodel.models.baseline import HomeFieldBaseline
 from nflmodel.models.elo import EloModel
 from nflmodel.models.ridge import RidgeModel
 from nflmodel.models.hybrid import HybridModel
+from nflmodel.models.lgbm import LGBMModel
 
 
 # for each season, train on earlier ones and predict/score next
@@ -29,7 +30,7 @@ def backtest(model, games, seasons=BACKTEST_SEASONS):
 if __name__ == "__main__":
     games = build_features()
     
-    for model in [HomeFieldBaseline(), EloModel(), RidgeModel(), HybridModel()]:
+    for model in [HomeFieldBaseline(), EloModel(), RidgeModel(), HybridModel(), LGBMModel()]:
         results = backtest(model, games)
         print(type(model).__name__)
         print(results[["season", "mae_model", "mae_vegas", "brier_model", "brier_vegas"]].round(3).to_string(index=False))
