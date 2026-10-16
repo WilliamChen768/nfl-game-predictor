@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 FEATURES = [
     "home_off_epa_prior", "home_def_epa_prior",
     "away_off_epa_prior", "away_def_epa_prior",
-    "elo_margin", "rest_diff", "home_field",
+    "elo_margin", "massey_margin", "rest_diff", "home_field",
     "home_qb_starts", "away_qb_starts",
 ]
 ALPHA = 10
