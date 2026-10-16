@@ -5,6 +5,7 @@ from nflmodel.data.games import load_games
 from nflmodel.features.epa import load_plays, team_game_epa, add_priors, current_priors
 from nflmodel.features.qb import qb_recent_starts, fill_upcoming_qbs
 from nflmodel.models.elo import EloModel
+from nflmodel.models.massey import MasseyModel
 
 
 PRIOR_COLS = ["off_epa_prior", "def_epa_prior", "off_pass_epa_prior", "def_pass_epa_prior"]
@@ -39,6 +40,7 @@ def build_features(include_upcoming=False, qb_overrides=None):
         df = fill_upcoming_qbs(df, qb_overrides)
 
     df["elo_margin"] = EloModel().pregame_margins(df)
+    df["massey_margin"] = MasseyModel().pregame_margins(df)
     df["rest_diff"] = df["home_rest"] - df["away_rest"]
     df["home_field"] = (~df["neutral"]).astype(int)
     df = df.join(qb_recent_starts(df))
