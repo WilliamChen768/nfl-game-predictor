@@ -1,0 +1,9 @@
+nflreadpy
+pandas
+pyarrow
+numpy
+scipy
+scikit-learn
+lightgbm
+matplotlib
+pytest

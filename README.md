@@ -29,7 +29,8 @@ and the betting market.
 held out and used once. Ridge's gap to Vegas there was 0.30 (Elo: 0.44), so
 its gains held up on unseen seasons.
 
-**Live 2026 record:** starts week 6. See [`predictions/`](predictions/).
+**Live 2026 record:** starts week 6 (picks updated from Elo to ridge before
+kickoff). See [`predictions/`](predictions/).
 
 ## Calibration
 
@@ -39,7 +40,15 @@ its gains held up on unseen seasons.
 
 When the model gives a team a 65% chance, that team wins about 65% of the
 time: every probability bin lands within a few points of perfect, about as
-well as the Vegas line.
+well as the Vegas line. The win-probability spread (13.0 points) was measured
+from the model's backtest errors rather than assumed.
+
+## Market check
+
+The model's side against the closing spread was right 51.9% of the time over
+3,028 games, just below the 52.4% break-even; its largest disagreements with
+the market were its least accurate.
+See [`notebooks/market_efficiency.ipynb`](notebooks/market_efficiency.ipynb).
 
 ## How it works
 
@@ -65,15 +74,13 @@ well as the Vegas line.
   close it, so the pipeline uses Elo for those weeks instead.
 - **Gradient boosting (LightGBM):** worse than ridge on the same features
   (10.11 vs 10.07), and blending the two added nothing.
-
-**Market check:** the model's side against the closing spread was right
-51.9% of the time over 3,028 games, just below the 52.4% break-even; its
-largest disagreements with the market were its least accurate.
-See [`notebooks/market_efficiency.ipynb`](notebooks/market_efficiency.ipynb).
+- **Weighting recent seasons more:** no gain; the relationships the model
+  learns are stable across eras.
 
 ## Usage
 
 ```bash
+pip install -r requirements.txt
 pip install -e .
 python -m nflmodel.data.ingest          # download / refresh data
 python -m nflmodel.evaluation.backtest  # historical evaluation
@@ -89,9 +96,10 @@ src/nflmodel/
 ├── data/              # download and clean data
 ├── features/          # EPA, QB, and the per-game feature table
 ├── models/            # baseline, Elo, Massey, ridge, hybrid, LightGBM
-├── evaluation/        # metrics, backtest, live grading
+├── evaluation/        # metrics, backtest, calibration, live grading
 └── predict.py         # weekly predictions
 notebooks/             # exploration and analysis
+reports/               # charts
 predictions/           # committed weekly picks (the public record)
 ```
 
