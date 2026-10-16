@@ -33,7 +33,9 @@ its gains held up on unseen seasons.
 
 ## Calibration
 
-![Calibration chart](reports/calibration.png)
+<p align="center">
+  <img src="reports/calibration.png" alt="Calibration chart" width="450">
+</p>
 
 When the model gives a team a 65% chance, that team wins about 65% of the
 time: every probability bin lands within a few points of perfect, about as
