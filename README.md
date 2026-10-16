@@ -31,6 +31,14 @@ its gains held up on unseen seasons.
 
 **Live 2026 record:** starts week 6. See [`predictions/`](predictions/).
 
+## Calibration
+
+![Calibration chart](reports/calibration.png)
+
+When the model gives a team a 65% chance, that team wins about 65% of the
+time: every probability bin lands within a few points of perfect, about as
+well as the Vegas line.
+
 ## How it works
 
 1. **Ingest:** downloads schedules, results, Vegas lines, and play-by-play
