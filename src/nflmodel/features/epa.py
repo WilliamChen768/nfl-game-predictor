@@ -4,6 +4,7 @@ import pandas as pd
 from nflmodel.config import RAW_DIR, FIRST_SEASON
 
 WINDOW = 9  # how many past games the rolling average uses
+SHRINK = 4  # games of "team average" blended into each QB's average
 
 
 # load every season's play-by-play and keep only pass/run plays
@@ -14,6 +15,24 @@ def load_plays(first=FIRST_SEASON, last=2026):
     )
     is_play = (pbp["pass"] == 1) | (pbp["rush"] == 1)
     return pbp[is_play & pbp["epa"].notna()].copy()
+
+
+# offensive EPA over the team's recent games started by THIS game's QB, shrunk toward the team average
+def add_qb_epa_prior(team_games, games, window=WINDOW, shrink=SHRINK):
+    # attach each team-game's starting QB from the schedule
+    qbs = pd.concat([
+        games[["game_id", "home_team", "home_qb_id"]].set_axis(["game_id", "team", "qb_id"], axis=1),
+        games[["game_id", "away_team", "away_qb_id"]].set_axis(["game_id", "team", "qb_id"], axis=1),
+    ])
+    df = team_games.merge(qbs, on=["game_id", "team"], how="left")
+    df = df.sort_values(["team", "season", "week"]).reset_index(drop=True)
+
+    by_qb = df.groupby(["team", "qb_id"])["off_epa"]
+    qb_avg = by_qb.transform(lambda s: s.shift(1).rolling(window, min_periods=1).mean())
+    n = by_qb.cumcount().clip(upper=window)        # earlier starts with this team (capped)
+
+    df["qb_off_epa_prior"] = (n * qb_avg.fillna(0) + shrink * df["off_epa_prior"]) / (n + shrink)
+    return df
 
 
 # one row per team per game: overall and pass-only EPA per play, offense and defense
