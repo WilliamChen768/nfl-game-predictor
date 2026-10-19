@@ -46,9 +46,11 @@ def check_qbs(this_week, qb1, names, injuries):
                 flagged = True
             listed = qb1.get(team)
             if listed and listed != qb:
-                print(f"  CHECK {team}: projected {names.get(qb, qb)}, "
-                      f"depth chart QB1 {names.get(listed, listed)}")
-                flagged = True
+                # if the depth chart's QB1 is out, the projected backup is expected; no need to flag
+                if injuries.get(listed) not in ("Out", "Doubtful"):
+                    print(f"  CHECK {team}: projected {names.get(qb, qb)}, "
+                          f"depth chart QB1 {names.get(listed, listed)}")
+                    flagged = True
     if not flagged:
         print("  No QB issues found.")
 

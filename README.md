@@ -63,8 +63,9 @@ See [`notebooks/market_efficiency.ipynb`](notebooks/market_efficiency.ipynb).
    when the features are mostly last season's data and Elo is more accurate.
 4. **Backtest:** walk-forward by season, so the model never sees the future.
 5. **Predict:** each week, retrains on all completed games and saves
-   timestamped picks. Projected starting QBs are cross-checked against depth
-   charts, with manual overrides for confirmed changes.
+   timestamped picks. Projected starting QBs are checked against the injury
+   report and depth charts; likely changes are flagged for review and fixed
+   with manual overrides.
 6. **Grade:** scores live picks against results, Vegas, and the spread.
 
 ## What didn't help
@@ -76,6 +77,8 @@ See [`notebooks/market_efficiency.ipynb`](notebooks/market_efficiency.ipynb).
   (10.11 vs 10.07), and blending the two added nothing.
 - **Weighting recent seasons more:** no gain; the relationships the model
   learns are stable across eras.
+- **QB-specific team EPA:** improved ridge in weeks 1–3 but not enough to
+beat Elo there, and was neutral from week 4 on, where the hybrid uses ridge.
 
 ## Usage
 
