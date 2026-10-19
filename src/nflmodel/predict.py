@@ -14,7 +14,7 @@ from nflmodel.evaluation.metrics import win_prob
 
 # Set a team's starter by hand when the news says the data is wrong,
 # e.g. {"TB": "00-0041251"}. Clear it out each week.
-QB_OVERRIDES = {"SEA": "00-0034869"}
+QB_OVERRIDES = {}
 
 
 # each team's most recent depth-chart QB1, plus a name lookup for every QB listed
@@ -26,18 +26,31 @@ def depth_chart_qbs(season):
     return dict(zip(qb1["team"], qb1["gsis_id"])), names
 
 
-# print every team whose projected starter differs from its depth-chart QB1
-def check_qbs(this_week, qb1, names):
+# each QB's injury-report game status for this week, e.g. {"00-00XXXXX": "Out"}
+def qb_injury_statuses(season, week):
+    inj = nfl.load_injuries([season]).to_pandas()
+    inj = inj[(inj["week"] == week) & (inj["position"] == "QB") & inj["report_status"].notna()]
+    return dict(zip(inj["gsis_id"], inj["report_status"]))
+
+
+# flag projected starters who are injured, or who differ from the depth chart's QB1
+def check_qbs(this_week, qb1, names, injuries):
     flagged = False
     for side in ["home", "away"]:
         for team, qb in zip(this_week[f"{side}_team"], this_week[f"{side}_qb_id"]):
+            if team in QB_OVERRIDES:
+                continue
+            status = injuries.get(qb)
+            if status:
+                print(f"  CHECK {team}: projected {names.get(qb, qb)} is listed {status.upper()}")
+                flagged = True
             listed = qb1.get(team)
-            if listed and listed != qb and team not in QB_OVERRIDES:
+            if listed and listed != qb:
                 print(f"  CHECK {team}: projected {names.get(qb, qb)}, "
                       f"depth chart QB1 {names.get(listed, listed)}")
                 flagged = True
     if not flagged:
-        print("  All projected starters match the depth chart.")
+        print("  No QB issues found.")
 
 
 if __name__ == "__main__":
@@ -90,6 +103,7 @@ if __name__ == "__main__":
     print("\nQB check:")
     try:
         qb1, names = depth_chart_qbs(season)
-        check_qbs(this_week, qb1, names)
+        injuries = qb_injury_statuses(season, week)
+        check_qbs(this_week, qb1, names, injuries)
     except Exception as e:
-        print(f"  Couldn't load depth charts ({e}). Check starters manually.")
+        print(f"  Couldn't load QB data ({e}). Check starters manually.")
