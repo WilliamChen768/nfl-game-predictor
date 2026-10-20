@@ -29,8 +29,15 @@ and the betting market.
 held out and used once. Ridge's gap to Vegas there was 0.30 (Elo: 0.44), so
 its gains held up on unseen seasons.
 
-**Live 2026 record:** starts week 6 (picks updated from Elo to ridge before
-kickoff). See [`predictions/`](predictions/).
+## Live 2026 record
+
+Picks are committed to [`predictions/`](predictions/) before kickoff, then
+graded after the games. Week-by-week notes: [`reports/live_log.md`](reports/live_log.md).
+
+| Week | Games | MAE | Vegas MAE | Gap | ATS | Winners (model / Vegas) |
+|---|---|---|---|---|---|---|
+| 6 | 14 | 7.64 | 6.61 | 1.04 | 5-9 | 7 / 9 |
+| **Total** | **14** | **7.64** | **6.61** | **1.04** | **5-9** | **7 / 9** |
 
 ## Calibration
 
