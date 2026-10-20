@@ -14,7 +14,7 @@ from nflmodel.evaluation.metrics import win_prob
 
 # Set a team's starter by hand when the news says the data is wrong,
 # e.g. {"TB": "00-0041251"}. Clear it out each week.
-QB_OVERRIDES = {}
+QB_OVERRIDES = {"SEA": "00-0034869"}
 
 
 # each team's most recent depth-chart QB1, plus a name lookup for every QB listed
@@ -84,6 +84,18 @@ if __name__ == "__main__":
 
     PREDICTIONS_DIR.mkdir(exist_ok=True)
     path = PREDICTIONS_DIR / f"{season}_week{week:02d}.csv"
+
+    # Picks for games that have kicked off are final: keep them from the saved file
+    if path.exists():
+        old = pd.read_csv(path)
+        today = pd.Timestamp.now(tz="America/New_York").strftime("%Y-%m-%d")
+        already_played = ~old["game_id"].isin(this_week["game_id"]) | (old["gameday"] < today)
+        locked = old[already_played]
+        if not locked.empty:
+            out = out[~out["game_id"].isin(locked["game_id"])]
+            out = pd.concat([locked, out], ignore_index=True).sort_values(["gameday", "game_id"])
+            print(f"Kept {len(locked)} locked pick(s): {', '.join(locked['game_id'])}\n")
+
     out.to_csv(path, index=False)
 
     # show team rankings using elo ratings
