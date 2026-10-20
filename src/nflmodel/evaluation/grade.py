@@ -4,7 +4,7 @@ grade.py — scores saved prediction files against actual results
 
 import numpy as np
 import pandas as pd
-from nflmodel.config import PREDICTIONS_DIR
+from nflmodel.config import PREDICTIONS_DIR, ROOT
 from nflmodel.data.games import load_games
 
 
@@ -49,16 +49,21 @@ if __name__ == "__main__":
     cover = df["result"] - df["spread_line"]
     df["ats_bet"] = (df["edge"] != 0) & (cover != 0)
     df["ats_win"] = np.sign(df["edge"]) == np.sign(cover)
+    df["ats_side"] = np.where(df["edge"] > 0, df["home_team"], df["away_team"])
 
+    counts = ["games", "model_correct", "vegas_correct", "ats_w", "ats_l"]
     by_week = df.groupby(["season", "week"]).apply(summarize)
+    by_week[counts] = by_week[counts].astype(int)
     total = summarize(df)
+    total[counts] = total[counts].astype(int)
 
     pd.set_option("display.float_format", "{:.2f}".format)
     print(by_week.to_string())
     print("\nSeason to date:")
-    print(f"  Winners:  model {total['model_correct']}/{total['games']}, "
-          f"Vegas {total['vegas_correct']}/{total['games']}")
+    print(f"  Winners:  model {int(total['model_correct'])}/{int(total['games'])}, "
+          f"Vegas {int(total['vegas_correct'])}/{int(total['games'])}")
     print(f"  MAE:      model {total['mae_model']:.2f}, Vegas {total['mae_vegas']:.2f}")
-    print(f"  ATS:      {total['ats_w']}-{total['ats_l']}  (break-even is 52.4%)")
+    print(f"  ATS:      {int(total['ats_w'])}-{int(total['ats_l'])}  (break-even is 52.4%)")
 
-    df.to_csv(PREDICTIONS_DIR / "graded.csv", index=False)
+    df = df.round({"model_miss": 1, "vegas_miss": 1})
+    df.to_csv(ROOT / "reports" / "graded.csv", index=False)
