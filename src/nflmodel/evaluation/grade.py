@@ -54,6 +54,7 @@ if __name__ == "__main__":
     counts = ["games", "model_correct", "vegas_correct", "ats_w", "ats_l"]
     by_week = df.groupby(["season", "week"]).apply(summarize)
     by_week[counts] = by_week[counts].astype(int)
+    by_week["gap"] = by_week["mae_model"] - by_week["mae_vegas"]
     total = summarize(df)
     total[counts] = total[counts].astype(int)
 
@@ -64,6 +65,8 @@ if __name__ == "__main__":
           f"Vegas {int(total['vegas_correct'])}/{int(total['games'])}")
     print(f"  MAE:      model {total['mae_model']:.2f}, Vegas {total['mae_vegas']:.2f}")
     print(f"  ATS:      {int(total['ats_w'])}-{int(total['ats_l'])}  (break-even is 52.4%)")
+    print(f"  MAE:      model {total['mae_model']:.2f}, Vegas {total['mae_vegas']:.2f}, "
+        f"gap {total['mae_model'] - total['mae_vegas']:.2f}")
 
     df = df.round({"model_miss": 1, "vegas_miss": 1})
     df.to_csv(ROOT / "reports" / "graded.csv", index=False)

@@ -37,7 +37,8 @@ graded after the games. Week-by-week notes: [`reports/live_log.md`](reports/live
 | Week | Games | MAE | Vegas MAE | Gap | ATS | Winners (model / Vegas) |
 |---|---|---|---|---|---|---|
 | 6 | 14 | 7.64 | 6.61 | 1.04 | 5-9 | 7 / 9 |
-| **Total** | **14** | **7.64** | **6.61** | **1.04** | **5-9** | **7 / 9** |
+| 7 | 14 | 10.61 | 10.54 | 0.08 | 5-8-1 | 10 / 9 |
+| **Total** | **28** | **9.13** | **8.57** | **0.56** | **10-17-1** | **17 / 18** |
 
 ## Calibration
 
