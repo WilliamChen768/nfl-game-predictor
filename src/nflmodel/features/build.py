@@ -3,7 +3,7 @@
 import pandas as pd
 from nflmodel.data.games import load_games
 from nflmodel.features.epa import load_plays, team_game_epa, add_priors, current_priors
-from nflmodel.features.qb import qb_recent_starts, fill_upcoming_qbs
+from nflmodel.features.qb import qb_recent_starts, fill_upcoming_qbs, apply_pbp_starters
 from nflmodel.models.elo import EloModel
 from nflmodel.models.massey import MasseyModel
 
@@ -24,7 +24,9 @@ def add_team_features(games, team_epa, side):
 # every feature for every game
 def build_features(include_upcoming=False, qb_overrides=None):
     games = load_games(include_upcoming)
-    team_games = team_game_epa(load_plays())
+    plays = load_plays()
+    games = apply_pbp_starters(games, plays)   # fix schedule QB errors before any QB features
+    team_games = team_game_epa(plays)
     team_epa = add_priors(team_games)
 
     df = add_team_features(games, team_epa, "home")
