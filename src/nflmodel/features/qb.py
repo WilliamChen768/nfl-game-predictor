@@ -1,8 +1,36 @@
 """qb.py — qb starts in the team's previous n games"""
 
 import pandas as pd
+from nflmodel.config import TEAM_ALIASES
 
 LOOKBACK = 15  # how many previous games to check
+
+
+# the starting QB for each team in each game: whoever threw the team's first pass
+def pbp_starters(plays):
+    passes = plays[plays["passer_player_id"].notna()].copy()
+    passes["team"] = passes["posteam"].replace(TEAM_ALIASES)
+    if "play_id" in passes.columns:
+        passes = passes.sort_values(["game_id", "play_id"])
+    first = passes.drop_duplicates(["game_id", "team"], keep="first")
+    return dict(zip(zip(first["game_id"], first["team"]), first["passer_player_id"]))
+
+
+# replace the schedule's QB ids with play-by-play starters wherever they disagree
+def apply_pbp_starters(games, plays):
+    starters = pbp_starters(plays)
+    games = games.copy()
+    names = {}
+    for side in ["home", "away"]:
+        names.update(zip(games[f"{side}_qb_id"], games[f"{side}_qb_name"]))
+    for side in ["home", "away"]:
+        keys = zip(games["game_id"], games[f"{side}_team"])
+        from_pbp = pd.Series([starters.get(k) for k in keys], index=games.index)
+        changed = from_pbp.notna() & (from_pbp != games[f"{side}_qb_id"])
+        games.loc[changed, f"{side}_qb_id"] = from_pbp[changed]
+        games.loc[changed, f"{side}_qb_name"] = from_pbp[changed].map(names)
+        print(f"  pbp starters: corrected {changed.sum()} {side} QBs")
+    return games
 
 
 # count, for each team-game, how many of the team's previous LOOKBACK games this QB started

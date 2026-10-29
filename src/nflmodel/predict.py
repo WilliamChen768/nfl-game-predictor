@@ -14,7 +14,7 @@ from nflmodel.evaluation.metrics import win_prob
 
 # Set a team's starter by hand when the news says the data is wrong,
 # e.g. {"TB": "00-0041251"}. Clear it out each week.
-QB_OVERRIDES = {"SEA": "00-0034869"}
+QB_OVERRIDES = {"BAL": "00-0034796"}
 
 
 # each team's most recent depth-chart QB1, plus a name lookup for every QB listed
