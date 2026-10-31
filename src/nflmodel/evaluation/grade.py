@@ -11,7 +11,7 @@ from nflmodel.data.games import load_games
 # turn all weekly predictions CSV into a table
 def load_predictions():
     files = sorted(p for p in PREDICTIONS_DIR.glob("*_week*.csv")
-                   if not p.stem.endswith("_ratings"))
+                if not p.stem.endswith(("_ratings", "_qb_news")))
     return pd.concat([pd.read_csv(p) for p in files], ignore_index=True)
 
 # combine stats of graded games into a row

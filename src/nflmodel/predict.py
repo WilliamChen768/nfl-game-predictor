@@ -1,11 +1,12 @@
 """
-predict.py — predicts the next unplayed week using ridge and saves a CSV
+predict.py — predicts the next unplayed week using hybrid and saves a CSV
 """
 
 import datetime as dt
 import numpy as np
 import pandas as pd
 import nflreadpy as nfl
+import requests
 from nflmodel.config import PREDICTIONS_DIR
 from nflmodel.features.build import build_features
 from nflmodel.models.hybrid import HybridModel
@@ -15,6 +16,8 @@ from nflmodel.evaluation.metrics import win_prob
 # Set a team's starter by hand when the news says the data is wrong,
 # e.g. {"TB": "00-0041251"}. Clear it out each week.
 QB_OVERRIDES = {"BAL": "00-0034796"}
+SLEEPER_TEAMS = {"LAR": "LA"}            # Sleeper team codes that differ from nflverse
+UNAVAILABLE = ("Out", "Doubtful", "IR", "PUP", "Sus")
 
 
 # each team's most recent depth-chart QB1, plus a name lookup for every QB listed
@@ -31,6 +34,42 @@ def qb_injury_statuses(season, week):
     inj = nfl.load_injuries([season]).to_pandas()
     inj = inj[(inj["week"] == week) & (inj["position"] == "QB") & inj["report_status"].notna()]
     return dict(zip(inj["gsis_id"], inj["report_status"]))
+
+
+# every QB's status and depth order from Sleeper, with gsis ids from nflverse rosters
+def sleeper_qbs(season):
+    r = requests.get("https://api.sleeper.app/v1/players/nfl", timeout=30)
+    r.raise_for_status()
+    p = pd.DataFrame(r.json().values())
+    p = p[(p["position"] == "QB") & p["team"].notna()].copy()
+    p["team"] = p["team"].replace(SLEEPER_TEAMS)
+    ids = (nfl.load_rosters([season]).to_pandas()[["sleeper_id", "gsis_id"]]
+        .dropna().astype(str).drop_duplicates("sleeper_id"))
+    p = p.merge(ids, left_on="player_id", right_on="sleeper_id", how="left", suffixes=("_sleeper", ""))
+    p["gsis_id"] = p["gsis_id"].fillna(p["gsis_id_sleeper"].str.strip())
+    return p[["team", "full_name", "status", "injury_status", "depth_chart_order", "gsis_id"]]
+
+
+# flag projected starters Sleeper says are unavailable, and suggest the healthy QB1
+def sleeper_check(this_week, sq):
+    flagged = False
+    for side in ["home", "away"]:
+        for team, qb in zip(this_week[f"{side}_team"], this_week[f"{side}_qb_id"]):
+            if team in QB_OVERRIDES:
+                continue
+            team_qbs = sq[sq["team"] == team]
+            healthy = team_qbs[(team_qbs["status"] == "Active")
+                               & ~team_qbs["injury_status"].isin(UNAVAILABLE)
+                               & team_qbs["gsis_id"].notna()].sort_values("depth_chart_order")
+            if healthy.empty:
+                continue
+            top = healthy.iloc[0]
+            if top["gsis_id"] != qb:
+                print(f"  SUGGEST {team}: Sleeper QB1 is {top['full_name']} "
+                      f'-> QB_OVERRIDES["{team}"] = "{top["gsis_id"]}"')
+                flagged = True
+    if not flagged:
+        print("  Sleeper agrees with all projected starters.")
 
 
 # flag projected starters who are injured, or who differ from the depth chart's QB1
@@ -70,6 +109,7 @@ if __name__ == "__main__":
     pred = model.predict(this_week)
 
     out = this_week[["game_id", "gameday", "away_team", "home_team", "spread_line"]].copy()
+    out["gameday"] = pd.to_datetime(out["gameday"]).dt.strftime("%Y-%m-%d")
     out["pred_margin"] = pred.round(1)                      # + means home team wins
     out["pick"] = np.where(pred > 0, out["home_team"], out["away_team"])
     home_prob = win_prob(pred)
@@ -121,3 +161,11 @@ if __name__ == "__main__":
         check_qbs(this_week, qb1, names, injuries)
     except Exception as e:
         print(f"  Couldn't load QB data ({e}). Check starters manually.")
+
+    print("\nSleeper check:")
+    try:
+        sq = sleeper_qbs(season)
+        sq.to_csv(PREDICTIONS_DIR / f"{season}_week{week:02d}_qb_news.csv", index=False)
+        sleeper_check(this_week, sq)
+    except Exception as e:
+        print(f"  Couldn't reach Sleeper ({e}). Check starters manually.")
