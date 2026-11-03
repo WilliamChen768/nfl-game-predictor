@@ -63,7 +63,6 @@ if __name__ == "__main__":
     print("\nSeason to date:")
     print(f"  Winners:  model {int(total['model_correct'])}/{int(total['games'])}, "
           f"Vegas {int(total['vegas_correct'])}/{int(total['games'])}")
-    print(f"  MAE:      model {total['mae_model']:.2f}, Vegas {total['mae_vegas']:.2f}")
     print(f"  ATS:      {int(total['ats_w'])}-{int(total['ats_l'])}  (break-even is 52.4%)")
     print(f"  MAE:      model {total['mae_model']:.2f}, Vegas {total['mae_vegas']:.2f}, "
         f"gap {total['mae_model'] - total['mae_vegas']:.2f}")
