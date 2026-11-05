@@ -1,0 +1,31 @@
+{
+  "2026_week09": {
+    "ARI": {
+      "id": "00-0035289",
+      "name": "Gardner Minshew",
+      "approved": true
+    },
+    "BAL": {
+      "id": "00-0040981",
+      "name": "Joe Fagnano",
+      "approved": true
+    },
+    "SEA": {
+      "id": "00-0035704",
+      "name": "Drew Lock",
+      "approved": true
+    },
+    "PHI": {
+      "id": "00-0039398",
+      "name": "Joe Milton",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "CLE": {
+      "id": "00-0040668",
+      "name": "Shedeur Sanders",
+      "approved": true,
+      "source": "sleeper"
+    }
+  }
+}
