@@ -15,7 +15,7 @@ from nflmodel.evaluation.metrics import win_prob
 
 # Set a team's starter by hand when the news says the data is wrong,
 # e.g. {"TB": "00-0041251"}. Clear it out each week.
-QB_OVERRIDES = {"ARI": "00-0035289"}
+QB_OVERRIDES = {"ARI": "00-0035289", "BAL": "00-0040981", "SEA": "00-0035704"}
 
 SLEEPER_TEAMS = {"LAR": "LA"}            # Sleeper team codes that differ from nflverse
 UNAVAILABLE = ("Out", "Doubtful", "IR", "PUP", "Sus")
