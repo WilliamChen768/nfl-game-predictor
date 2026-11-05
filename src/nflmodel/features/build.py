@@ -2,13 +2,15 @@
 
 import pandas as pd
 from nflmodel.data.games import load_games
-from nflmodel.features.epa import load_plays, team_game_epa, add_priors, current_priors
+from nflmodel.features.epa import (load_plays, team_game_epa, add_priors, current_priors,
+                                   add_opponent_adjustment, ADJ_COLS)
 from nflmodel.features.qb import qb_recent_starts, fill_upcoming_qbs, apply_pbp_starters
 from nflmodel.models.elo import EloModel
 from nflmodel.models.massey import MasseyModel
 
 
-PRIOR_COLS = ["off_epa_prior", "def_epa_prior", "off_pass_epa_prior", "def_pass_epa_prior"]
+PRIOR_COLS = ["off_epa_prior", "def_epa_prior", "off_pass_epa_prior", "def_pass_epa_prior",
+              "off_epa_adj_prior", "def_epa_adj_prior", "off_pass_epa_adj_prior", "def_pass_epa_adj_prior"]
 
 
 # attach one team's pre-game EPA to each game, with a home_ or away_ prefix
@@ -27,7 +29,7 @@ def build_features(include_upcoming=False, qb_overrides=None):
     plays = load_plays()
     games = apply_pbp_starters(games, plays)   # fix schedule QB errors before any QB features
     team_games = team_game_epa(plays)
-    team_epa = add_priors(team_games)
+    team_epa = add_opponent_adjustment(add_priors(team_games))
 
     df = add_team_features(games, team_epa, "home")
     df = add_team_features(df, team_epa, "away")
@@ -35,7 +37,8 @@ def build_features(include_upcoming=False, qb_overrides=None):
     # upcoming games have no play-by-play: use each team's current average instead
     upcoming = df["result"].isna()
     if upcoming.any():
-        current = current_priors(team_games)
+        current = pd.concat([current_priors(team_games),
+                            current_priors(team_epa, cols=ADJ_COLS)], axis=1)
         for side in ["home", "away"]:
             for c in PRIOR_COLS:
                 df.loc[upcoming, f"{side}_{c}"] = df.loc[upcoming, f"{side}_team"].map(current[c])

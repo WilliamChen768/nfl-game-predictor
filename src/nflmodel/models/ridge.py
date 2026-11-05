@@ -4,12 +4,10 @@ from sklearn.linear_model import Ridge
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-FEATURES = [
-    "home_off_epa_prior", "home_def_epa_prior",
-    "away_off_epa_prior", "away_def_epa_prior",
-    "elo_margin", "massey_margin", "rest_diff", "home_field",
-    "home_qb_starts", "away_qb_starts",
-]
+FEATURES = ["home_off_epa_adj_prior", "home_def_epa_adj_prior",
+            "away_off_epa_adj_prior", "away_def_epa_adj_prior",
+            "elo_margin", "massey_margin", "rest_diff", "home_field",
+            "home_qb_starts", "away_qb_starts"]
 ALPHA = 10
 
 

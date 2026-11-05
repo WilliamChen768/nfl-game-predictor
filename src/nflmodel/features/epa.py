@@ -43,10 +43,36 @@ def team_game_epa(plays):
     return combined.sort_values(["team", "season", "week"]).reset_index(drop=True)
 
 
+COLS = ["off_epa", "def_epa", "off_pass_epa", "def_pass_epa"]
+# each stat is adjusted by the opponent's opposite stat
+ADJ = {"off_epa": "def_epa", "def_epa": "off_epa",
+       "off_pass_epa": "def_pass_epa", "def_pass_epa": "off_pass_epa"}
+ADJ_COLS = [f"{c}_adj" for c in COLS]
+
+
+# opponent-adjusted EPA: each game's EPA minus what the opponent usually allows (or gains),
+# using the opponent's pre-game average, then averaged over the previous WINDOW games
+def add_opponent_adjustment(team_epa, window=WINDOW):
+    opp = team_epa[["game_id", "team"] + [f"{c}_prior" for c in COLS]].copy()
+    opp.columns = ["game_id", "opponent"] + [f"opp_{c}_prior" for c in COLS]
+
+    df = team_epa.merge(opp, on="game_id")
+    df = df[df["team"] != df["opponent"]]
+    df = df.sort_values(["team", "season", "week"]).reset_index(drop=True)
+
+    for col, opp_col in ADJ.items():
+        df[f"{col}_adj"] = df[col] - df[f"opp_{opp_col}_prior"]
+        df[f"{col}_adj_prior"] = (
+            df.groupby("team")[f"{col}_adj"]
+            .transform(lambda s: s.shift(1).rolling(window, min_periods=1).mean())
+        )
+    return df
+
+
 # add each team's average over its previous WINDOW games
 def add_priors(team_games, window=WINDOW):
     df = team_games.copy()
-    for col in ["off_epa", "def_epa", "off_pass_epa", "def_pass_epa"]:
+    for col in COLS:
         df[f"{col}_prior"] = (
             df.groupby("team")[col]
             .transform(lambda s: s.shift(1).rolling(window, min_periods=1).mean())
@@ -55,9 +81,8 @@ def add_priors(team_games, window=WINDOW):
 
 
 # each team's average over its most recent WINDOW games (for predicting upcoming games)
-def current_priors(team_games, window=WINDOW):
+def current_priors(team_games, window=WINDOW, cols=COLS):
     recent = team_games.groupby("team").tail(window)
-    cols = ["off_epa", "def_epa", "off_pass_epa", "def_pass_epa"]
     return recent.groupby("team")[cols].mean().add_suffix("_prior")
 
 
