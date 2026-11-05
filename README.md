@@ -87,7 +87,9 @@ See [`notebooks/market_efficiency.ipynb`](notebooks/market_efficiency.ipynb).
 - **Weighting recent seasons more:** no gain; the relationships the model
   learns are stable across eras.
 - **QB-specific team EPA:** improved ridge in weeks 1–3 but not enough to
-beat Elo there, and was neutral from week 4 on, where the hybrid uses ridge.
+  beat Elo there, and was neutral from week 4 on, where the hybrid uses ridge.
+- **Opponent-adjusted EPA:** slightly worse (10.03 vs 10.02); Massey and Elo
+  ratings already account for strength of schedule.
 
 ## Usage
 
