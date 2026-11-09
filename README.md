@@ -56,9 +56,9 @@ from the model's backtest errors rather than assumed.
 
 ## Market check
 
-The model's side against the closing spread was right 51.9% of the time over
-3,028 games, just below the 52.4% break-even; its largest disagreements with
-the market were its least accurate.
+The model's side against the closing spread was right 51.8% of the time over
+3,028 games, below the 52.4% break-even. No disagreement threshold beats the
+market reliably; the largest disagreements (5+ points) were the least accurate.
 See [`notebooks/market_efficiency.ipynb`](notebooks/market_efficiency.ipynb).
 
 ## How it works
