@@ -16,3 +16,6 @@ BACKTEST_SEASONS = range(2015, 2026)   # 2015-2025
 
 # average nfl margin spread
 MARGIN_SD = 13
+
+# QB overrides for every week, keyed like "2026_week09"
+QB_OVERRIDES_FILE = PREDICTIONS_DIR / "qb_overrides.json"

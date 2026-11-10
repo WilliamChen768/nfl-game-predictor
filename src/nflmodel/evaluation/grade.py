@@ -6,13 +6,17 @@ import numpy as np
 import pandas as pd
 from nflmodel.config import PREDICTIONS_DIR, ROOT
 from nflmodel.data.games import load_games
+from nflmodel.evaluation.report import update_readme, live_table, draft_latest_week
+
+COUNTS = ["games", "model_correct", "vegas_correct", "ats_w", "ats_l", "ats_p"]
 
 
 # turn all weekly predictions CSV into a table
 def load_predictions():
     files = sorted(p for p in PREDICTIONS_DIR.glob("*_week*.csv")
-                if not p.stem.endswith(("_ratings", "_qb_news")))
+                   if not p.stem.endswith(("_ratings", "_qb_news")))
     return pd.concat([pd.read_csv(p) for p in files], ignore_index=True)
+
 
 # combine stats of graded games into a row
 def summarize(df):
@@ -25,18 +29,19 @@ def summarize(df):
         "mae_vegas": df["vegas_miss"].mean(),
         "ats_w": int(bets["ats_win"].sum()),
         "ats_l": int((~bets["ats_win"]).sum()),
+        "ats_p": int(df["ats_push"].sum()),
     })
 
 
-if __name__ == "__main__":
+# score every saved pick that has a result: per game, per week, and season to date
+def grade():
     preds = load_predictions()
     played = load_games()  # completed games only
 
-    # Keep only predicted games that have been played since
+    # keep only predicted games that have been played since
     df = preds.merge(played[["game_id", "season", "week", "result"]], on="game_id")
     if df.empty:
-        print("No graded games yet. Check back after this week's games.")
-        raise SystemExit
+        return None, None, None
 
     winner = np.sign(df["result"])
     df["model_correct"] = np.sign(df["pred_margin"]) == winner
@@ -50,14 +55,17 @@ if __name__ == "__main__":
     df["ats_bet"] = (df["edge"] != 0) & (cover != 0)
     df["ats_win"] = np.sign(df["edge"]) == np.sign(cover)
     df["ats_side"] = np.where(df["edge"] > 0, df["home_team"], df["away_team"])
+    df["ats_push"] = (df["edge"] != 0) & (cover == 0)
 
-    counts = ["games", "model_correct", "vegas_correct", "ats_w", "ats_l"]
     by_week = df.groupby(["season", "week"]).apply(summarize)
-    by_week[counts] = by_week[counts].astype(int)
+    by_week[COUNTS] = by_week[COUNTS].astype(int)
     by_week["gap"] = by_week["mae_model"] - by_week["mae_vegas"]
     total = summarize(df)
-    total[counts] = total[counts].astype(int)
+    total[COUNTS] = total[COUNTS].astype(int)
+    return df, by_week, total
 
+
+def print_summary(by_week, total):
     pd.set_option("display.float_format", "{:.2f}".format)
     print(by_week.to_string())
     print("\nSeason to date:")
@@ -65,7 +73,18 @@ if __name__ == "__main__":
           f"Vegas {int(total['vegas_correct'])}/{int(total['games'])}")
     print(f"  ATS:      {int(total['ats_w'])}-{int(total['ats_l'])}  (break-even is 52.4%)")
     print(f"  MAE:      model {total['mae_model']:.2f}, Vegas {total['mae_vegas']:.2f}, "
-        f"gap {total['mae_model'] - total['mae_vegas']:.2f}")
+          f"gap {total['mae_model'] - total['mae_vegas']:.2f}")
+
+
+if __name__ == "__main__":
+    df, by_week, total = grade()
+    if df is None:
+        print("No graded games yet. Check back after this week's games.")
+        raise SystemExit
+
+    print_summary(by_week, total)
 
     df = df.round({"model_miss": 1, "vegas_miss": 1})
     df.to_csv(ROOT / "reports" / "graded.csv", index=False)
+    update_readme(live_table(by_week, total))
+    draft_latest_week(df, by_week, total)

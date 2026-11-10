@@ -34,12 +34,14 @@ its gains held up on unseen seasons.
 Picks are committed to [`predictions/`](predictions/) before kickoff, then
 graded after the games. Week-by-week notes: [`reports/live_log.md`](reports/live_log.md).
 
+<!-- LIVE_START -->
 | Week | Games | MAE | Vegas MAE | Gap | ATS | Winners (model / Vegas) |
 |---|---|---|---|---|---|---|
 | 6 | 14 | 7.64 | 6.61 | 1.04 | 5-9 | 7 / 9 |
 | 7 | 14 | 10.61 | 10.54 | 0.08 | 5-8-1 | 10 / 9 |
-| 8 | 14 | 10.11 | 10.96 | −0.85 | 9-5 | 11 / 10 |
+| 8 | 14 | 10.11 | 10.96 | -0.85 | 9-5 | 11 / 10 |
 | **Total** | **42** | **9.46** | **9.37** | **0.09** | **19-22-1** | **28 / 28** |
+<!-- LIVE_END -->
 
 ## Calibration
 
@@ -54,9 +56,9 @@ from the model's backtest errors rather than assumed.
 
 ## Market check
 
-The model's side against the closing spread was right 51.9% of the time over
-3,028 games, just below the 52.4% break-even; its largest disagreements with
-the market were its least accurate.
+The model's side against the closing spread was right 51.8% of the time over
+3,028 games, below the 52.4% break-even. No disagreement threshold beats the
+market reliably; the largest disagreements (5+ points) were the least accurate.
 See [`notebooks/market_efficiency.ipynb`](notebooks/market_efficiency.ipynb).
 
 ## How it works
