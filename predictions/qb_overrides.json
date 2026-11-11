@@ -27,5 +27,43 @@
       "approved": true,
       "source": "sleeper"
     }
+  },
+  "2026_week10": {
+    "LV": {
+      "id": "00-0041562",
+      "name": "Fernando Mendoza",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "BAL": {
+      "id": "00-0033119",
+      "name": "Jacoby Brissett",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "MIN": {
+      "id": "00-0029604",
+      "name": "Kirk Cousins",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "CLE": {
+      "id": "00-0033537",
+      "name": "Deshaun Watson",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "ARI": {
+      "id": "00-0041561",
+      "name": "Carson Beck",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "MIA": {
+      "id": "00-0040014",
+      "name": "Kyle McCord",
+      "approved": true,
+      "source": "sleeper"
+    }
   }
 }

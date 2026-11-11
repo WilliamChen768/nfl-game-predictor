@@ -8,6 +8,28 @@ Gap = model MAE minus Vegas MAE (lower is better; backtest average 0.21).
 
 ---
 
+## Week 9
+
+**Record:** 7-8 ATS · MAE 8.52 (Vegas 8.43, gap 0.09) · winners 14/15 (Vegas 14/15)
+
+**QB overrides:** ARI (Gardner Minshew), BAL (Joe Fagnano), CLE (Shedeur Sanders), PHI (Joe Milton), SEA (Drew Lock)
+
+**Best vs Vegas**
+- CIN@ATL: model CIN 6.5, Vegas CIN 3, result CIN 17 (beat Vegas by 3.5)
+- HOU@LAC: model HOU 6.2, Vegas HOU 4.5, result HOU 22 (beat Vegas by 1.7)
+- LV@SF: model SF 11.3, Vegas SF 10, result SF 21 (beat Vegas by 1.3)
+
+**Worst vs Vegas**
+- JAX@BAL: model JAX 6.4, Vegas JAX 10, result JAX 23 (Vegas better by 3.6)
+- BUF@MIN: model BUF 1.3, Vegas BUF 3.5, result BUF 17 (Vegas better by 2.2)
+- NYJ@KC: model KC 8.1, Vegas KC 10, result KC 23 (Vegas better by 1.9)
+
+**Notes:** TODO
+
+**Running total:** gap 0.09 over 57 games. ATS 26-30-1.
+
+---
+
 ## Week 8
 
 **Record:** 9-5 ATS · MAE 10.11 (Vegas 10.96, gap −0.85) · winners 11/14 (Vegas 10/14)
