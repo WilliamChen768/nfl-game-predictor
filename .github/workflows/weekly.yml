@@ -1,0 +1,100 @@
+name: weekly
+
+on:
+  schedule:
+    - cron: "0 22 * * 3"   # Wed 22:00 UTC (6 PM EDT / 5 PM EST): grade last week, first picks
+    - cron: "0 12 * * 6"   # Sat 12:00 UTC (8 AM EDT / 7 AM EST): final picks
+  workflow_dispatch:       # the "Run workflow" button
+    inputs:
+      approve:
+        description: "Teams to approve, e.g. MIN LV"
+        required: false
+      set:
+        description: "Set a QB by hand: TEAM QB_ID, e.g. ARI 00-0035289"
+        required: false
+  pull_request:
+    types: [edited]        # ticking a checkbox edits the PR description
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: weekly            # never two weekly runs at once
+  cancel-in-progress: false
+
+jobs:
+  weekly:
+    # for PR edits, only react to the weekly PR itself
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.ref == 'weekly-update'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      # keep approvals already made on an open weekly PR that hasn't been merged yet
+      - name: Bring over the open PR's QB overrides
+        run: |
+          if git fetch origin weekly-update; then
+            if ! git merge-base --is-ancestor FETCH_HEAD origin/main; then
+              git checkout FETCH_HEAD -- predictions/qb_overrides.json || true
+            fi
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - run: pip install -r requirements.txt && pip install -e .
+
+      - name: Restore NFL data from the last run
+        uses: actions/cache@v4
+        with:
+          path: data/raw
+          key: nfl-data-${{ github.run_id }}
+          restore-keys: nfl-data-
+
+      - name: Collect approvals
+        id: args
+        env:
+          EVENT: ${{ github.event_name }}
+          BODY: ${{ github.event.pull_request.body }}
+          APPROVE: ${{ inputs.approve }}
+          SET: ${{ inputs.set }}
+        run: |
+          ARGS=""
+          if [ "$EVENT" = "pull_request" ]; then
+            TEAMS=$(printf '%s\n' "$BODY" | grep -oE '^- \[[xX]\] [A-Z]{2,3}:' | grep -oE '[A-Z]{2,3}' | tr '\n' ' ' || true)
+            if [ -n "$TEAMS" ]; then ARGS="--approve $TEAMS"; fi
+          fi
+          if [ -n "$APPROVE" ]; then ARGS="$ARGS --approve $APPROVE"; fi
+          if [ -n "$SET" ]; then ARGS="$ARGS --set $SET"; fi
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+
+      - name: Run the weekly routine
+        env:
+          ARGS: ${{ steps.args.outputs.args }}
+        run: python -m nflmodel.weekly $ARGS --summary "$RUNNER_TEMP/pr_body.md"
+
+      - name: Link this run's full log (QB checks) in the PR
+        run: |
+          printf '\n---\n[Full run log, including QB checks](%s)\n' \
+            "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            >> "$RUNNER_TEMP/pr_body.md"
+
+      - name: Open or update the weekly PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: weekly-update
+          base: main
+          title: Weekly picks and grades
+          body-path: ${{ runner.temp }}/pr_body.md
+          commit-message: Weekly update (automated)
+          add-paths: |
+            predictions/
+            reports/graded.csv
+            reports/live_log.md
+            README.md
