@@ -3,7 +3,7 @@ NE,Behren Morton,Active,,3.0,00-0041123
 PIT,Dwayne Haskins,Active,,,00-0035232
 CIN,Joe Flacco,Active,,2.0,00-0026158
 HOU,Davis Mills,Active,,2.0,00-0036898
-SEA,Drew Lock,Active,Questionable,1.0,00-0035704
+SEA,Drew Lock,Active,,1.0,00-0035704
 DAL,Dak Prescott,Active,,1.0,00-0033077
 LA,Matthew Stafford,Active,,1.0,00-0026498
 PHI,Joe Milton,Active,,1.0,00-0039398
@@ -22,15 +22,15 @@ GB,Jordan Love,Active,,1.0,00-0036264
 TEN,Hendon Hooker,Active,,,00-0038550
 NO,Blake Bortles,Active,,,00-0031407
 ARI,Josh Johnson,Active,,2.0,00-0026300
-WAS,Athan Kaliakmanis,Active,,4.0,00-0041117
+WAS,Athan Kaliakmanis,Active,Out,4.0,00-0041117
 MIN,Kirk Cousins,Active,,1.0,00-0029604
 KC,Patrick Mahomes,Active,,1.0,00-0033873
 CLE,Shedeur Sanders,Active,,2.0,00-0040668
-LAC,Justin Herbert,Active,Questionable,1.0,00-0036355
+LAC,Justin Herbert,Active,,1.0,00-0036355
 TB,Garrett Greene,Active,,,
 CHI,Case Keenum,Active,Out,2.0,00-0028986
 BAL,Lamar Jackson,Inactive,IR,2.0,00-0034796
-ARI,Joey Aguilar,Active,,4.0,
+ARI,Joey Aguilar,Active,,4.0,00-0041203
 CIN,Sean Clifford,Active,,,00-0038391
 PIT,Aaron Rodgers,Active,,1.0,00-0023459
 NO,Tyler Shough,Active,,1.0,00-0040743
@@ -66,7 +66,7 @@ IND,Anthony Richardson Sr.,Active,,2.0,00-0039164
 CIN,Joe Burrow,Active,,1.0,00-0036442
 DET,Joshua Dobbs,Active,,2.0,00-0033949
 LV,Aidan O'Connell,Active,,2.0,00-0038579
-DET,Jared Goff,Active,Questionable,1.0,00-0033106
+DET,Jared Goff,Active,,1.0,00-0033106
 LAC,Trey Lance,Inactive,IR,3.0,00-0037012
 NYG,Jameis Winston,Active,,2.0,00-0031503
 BAL,Zach Terrell,Active,,,
@@ -82,7 +82,7 @@ DEN,Bo Nix,Active,,1.0,00-0039732
 LA,Matthew Caldwell,Inactive,IR,4.0,
 BUF,Kyle Allen,Active,,2.0,00-0034577
 TB,Jalon Daniels,Active,,3.0,00-0041251
-MIN,Carson Wentz,Active,Questionable,2.0,00-0032950
+MIN,Carson Wentz,Active,,2.0,00-0032950
 HOU,Graham Mertz,Inactive,IR,3.0,00-0040211
 GB,Cam Miller,Active,,,00-0040222
 CLE,Dillon Gabriel,Active,,3.0,00-0040704
@@ -97,7 +97,7 @@ PHI,Tanner McKee,Active,,3.0,00-0038400
 BUF,Josh Allen,Active,,1.0,00-0034857
 PIT,Ben Roethlisberger,Active,,,00-0022924
 WAS,Sam Hartman,Active,,,
-DAL,Sam Howell,Active,,2.0,00-0037077
+DAL,Sam Howell,Active,,3.0,00-0037077
 CHI,Caleb Williams,Active,,1.0,00-0039918
 BAL,Aaron Bailey,Active,,4.0,
 BAL,Jacoby Brissett,Active,,1.0,00-0033119
@@ -116,6 +116,6 @@ PIT,Drew Allar,Active,,4.0,00-0041565
 WAS,Jayden Daniels,Active,,1.0,00-0039910
 DET,Luke Altmyer,Active,,,00-0041453
 ATL,Jack Strand,Active,,4.0,
-MIN,Kyler Murray,Active,Doubtful,3.0,00-0035228
+MIN,Kyler Murray,Active,Out,3.0,00-0035228
 NE,Drake Maye,Active,,1.0,00-0039851
 SEA,Skyler Howard,Active,,,
