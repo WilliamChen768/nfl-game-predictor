@@ -8,6 +8,28 @@ Gap = model MAE minus Vegas MAE (lower is better; backtest average 0.21).
 
 ---
 
+## Week 10
+
+**Record:** 6-6 ATS · MAE 10.84 (Vegas 10.57, gap 0.27) · winners 9/14 (Vegas 9/14)
+
+**QB overrides:** ARI (Carson Beck), BAL (Jacoby Brissett), CLE (Deshaun Watson), LV (Fernando Mendoza), MIA (Kyle McCord), MIN (Kirk Cousins)
+
+**Best vs Vegas**
+- CAR@NO: model CAR 0.4, Vegas NO 2.5, result CAR 3 (beat Vegas by 2.9)
+- BUF@NYJ: model BUF 10.5, Vegas BUF 8.5, result BUF 19 (beat Vegas by 2.0)
+- SF@DAL: model SF 4.1, Vegas SF 3.5, result SF 6 (beat Vegas by 0.6)
+
+**Worst vs Vegas**
+- MIN@GB: model GB 6.5, Vegas GB 3, result MIN 20 (Vegas better by 3.5)
+- NE@DET: model NE 0.6, Vegas DET 2.5, result DET 25 (Vegas better by 3.1)
+- LA@ARI: model LA 8.3, Vegas LA 9.5, result LA 28 (Vegas better by 1.2)
+
+**Notes:** TODO
+
+**Running total:** gap 0.12 over 71 games. ATS 32-36-1.
+
+---
+
 ## Week 9
 
 **Record:** 7-8 ATS · MAE 8.52 (Vegas 8.43, gap 0.09) · winners 14/15 (Vegas 14/15)
