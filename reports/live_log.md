@@ -24,7 +24,11 @@ Gap = model MAE minus Vegas MAE (lower is better; backtest average 0.21).
 - NE@DET: model NE 0.6, Vegas DET 2.5, result DET 25 (Vegas better by 3.1)
 - LA@ARI: model LA 8.3, Vegas LA 9.5, result LA 28 (Vegas better by 1.2)
 
-**Notes:** TODO
+**Notes:** Six QB overrides, mostly neutral. MIN@GB was the worst miss: Cousins (traded
+from LV) started and MIN won by 20, but the model moved toward GB when he was approved
+(6.2 → 6.5) because he had zero MIN starts; familiarity treats a traded veteran like a
+backup. Second time this season the model misjudged a QB change direction (see ARI@SEA,
+week 9). Strongest case so far for a per-QB rating. My own call, SF by 15 at DAL: SF won by 6.
 
 **Running total:** gap 0.12 over 71 games. ATS 32-36-1.
 
@@ -46,7 +50,12 @@ Gap = model MAE minus Vegas MAE (lower is better; backtest average 0.21).
 - BUF@MIN: model BUF 1.3, Vegas BUF 3.5, result BUF 17 (Vegas better by 2.2)
 - NYJ@KC: model KC 8.1, Vegas KC 10, result KC 23 (Vegas better by 1.9)
 
-**Notes:** TODO
+**Notes:** Five QB overrides, all set midweek from news and Sleeper. Sleeper's calls held up:
+PHI with Milton won by 8 (model PHI 3.9, Vegas 3.5) and CLE with Sanders lost by 1 at NO.
+JAX@BAL was the worst miss: with Lamar and Huntley out, BAL started third-stringer Fagnano;
+the override moved the model only 1.6 points (JAX 4.8 → 6.4) while Vegas had JAX 10, and
+JAX won by 23. The model undervalues a starter → third-stringer drop. ARI@SEA with backups
+on both sides went better than feared: model SEA 9.3, Vegas 8.5, SEA won by 14.
 
 **Running total:** gap 0.09 over 57 games. ATS 26-30-1.
 
