@@ -10,9 +10,8 @@ PHI,Joe Milton,Active,,1.0,00-0039398
 IND,Jalen Morton,Active,,,
 SEA,Sam Darnold,Active,Out,2.0,00-0034869
 ATL,Andy Dalton,Active,Out,2.0,00-0027973
-IND,Daniel Jones,Active,,1.0,00-0035710
 CHI,Miller Moss,Active,,,
-NYJ,Geno Smith,Active,Questionable,1.0,00-0030565
+NYJ,Geno Smith,Active,,1.0,00-0030565
 ATL,Tua Tagovailoa,Active,,3.0,00-0036212
 PHI,Jalen Hurts,Inactive,IR,2.0,00-0036389
 NO,Zach Wilson,Active,,3.0,00-0037013
@@ -36,16 +35,16 @@ CIN,Sean Clifford,Active,,,00-0038391
 PIT,Aaron Rodgers,Active,,1.0,00-0023459
 NO,Tyler Shough,Active,,1.0,00-0040743
 GB,Tyrod Taylor,Active,,2.0,00-0028118
-TB,Baker Mayfield,Active,Questionable,2.0,00-0034855
+TB,Baker Mayfield,Active,Questionable,1.0,00-0034855
 NYJ,Will Levis,Active,,,00-0039152
-ARI,Carson Beck,Active,,1.0,00-0041561
+ARI,Carson Beck,Active,Questionable,1.0,00-0041561
 DAL,Kyle Trask,Active,,,00-0036928
 CAR,Bryce Young,Active,,1.0,00-0039150
 BAL,Tyler Huntley,Inactive,IR,3.0,00-0035993
 NYG,Jake Haener,Active,,,00-0038998
 BAL,Skylar Thompson,Inactive,IR,5.0,00-0037327
 CAR,Haynes King,Active,,3.0,00-0041149
-TB,Easton Stick,Active,,4.0,00-0035282
+TB,Easton Stick,Active,,3.0,00-0035282
 PHI,Cole Payton,Active,,4.0,00-0040891
 PIT,Nick Schuessler,Active,,,
 TEN,Cam Ward,Active,,1.0,00-0040676
@@ -56,7 +55,7 @@ TEN,Mitchell Trubisky,Active,,2.0,00-0033869
 JAX,Trevor Lawrence,Active,,1.0,00-0036971
 NYG,Jaxson Dart,Inactive,IR,4.0,00-0040691
 NYG,J.J. McCarthy,Active,,1.0,00-0039923
-IND,Riley Leonard,Active,,3.0,00-0040206
+IND,Riley Leonard,Active,Out,1.0,00-0040206
 MIN,Max Brosmer,Active,,4.0,00-0040494
 ATL,Michael Penix Jr.,Active,,1.0,00-0039917
 NE,Tommy DeVito,Active,,2.0,00-0038476
@@ -83,7 +82,7 @@ MIA,Brady Cook,Active,,3.0,00-0040398
 DEN,Bo Nix,Active,,1.0,00-0039732
 LA,Matthew Caldwell,Inactive,IR,4.0,
 BUF,Kyle Allen,Active,,2.0,00-0034577
-TB,Jalon Daniels,Active,,1.0,00-0041251
+TB,Jalon Daniels,Active,,4.0,00-0041251
 MIN,Carson Wentz,Active,,2.0,00-0032950
 HOU,Graham Mertz,Inactive,IR,3.0,00-0040211
 GB,Cam Miller,Active,,,00-0040222
