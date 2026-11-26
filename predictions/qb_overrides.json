@@ -73,5 +73,37 @@
       "approved": true,
       "source": "sleeper"
     }
+  },
+  "2026_week12": {
+    "PIT": {
+      "id": "00-0034771",
+      "name": "Mason Rudolph",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "IND": {
+      "id": "00-0039164",
+      "name": "Anthony Richardson Sr.",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "ARI": {
+      "id": "00-0041561",
+      "name": "Carson Beck",
+      "approved": false,
+      "source": "sleeper"
+    },
+    "NE": {
+      "id": "00-0038476",
+      "name": "Tommy DeVito",
+      "approved": true,
+      "source": "sleeper"
+    },
+    "SEA": {
+      "id": "00-0034869",
+      "name": "Sam Darnold",
+      "approved": true,
+      "source": "sleeper"
+    }
   }
 }

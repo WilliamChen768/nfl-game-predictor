@@ -8,6 +8,28 @@ Gap = model MAE minus Vegas MAE (lower is better; backtest average 0.21).
 
 ---
 
+## Week 11
+
+**Record:** 5-8 ATS · MAE 8.45 (Vegas 7.88, gap 0.56) · winners 9/13 (Vegas 9/13)
+
+**QB overrides:** TB (Jalon Daniels)
+
+**Best vs Vegas**
+- MIN@SF: model SF 5.6, Vegas SF 3.5, result SF 25 (beat Vegas by 2.1)
+- NYJ@LAC: model LAC 1.2, Vegas LAC 3, result NYJ 3 (beat Vegas by 1.8)
+- TB@DET: model DET 6.1, Vegas DET 4.5, result DET 10 (beat Vegas by 1.6)
+
+**Worst vs Vegas**
+- IND@HOU: model HOU 7.1, Vegas HOU 12.5, result HOU 23 (Vegas better by 5.4)
+- ARI@KC: model KC 12.6, Vegas KC 15.5, result KC 27 (Vegas better by 2.9)
+- PIT@PHI: model PIT 4.9, Vegas PIT 3.5, result PHI 3 (Vegas better by 1.4)
+
+**Notes:** TODO
+
+**Running total:** gap 0.19 over 84 games. ATS 37-44-1.
+
+---
+
 ## Week 10
 
 **Record:** 6-6 ATS · MAE 10.84 (Vegas 10.57, gap 0.27) · winners 9/14 (Vegas 9/14)
